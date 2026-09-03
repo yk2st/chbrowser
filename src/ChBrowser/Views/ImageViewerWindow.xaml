@@ -101,7 +101,13 @@
             </TabControl.ItemContainerStyle>
             <TabControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type vm:ImageViewerTabViewModel}">
+                    <!-- Background="Transparent" は必須: null のままだと Grid は描画済みの子要素
+                         (Stretch=Uniform の縮小画像の矩形など) の上でしかヒットテストされず、極端な
+                         縦長/横長画像でタイル内にレターボックスの余白ができると、その余白を通って
+                         × ボタンへ向かう途中で IsMouseOver が外れてボタンが消える。Transparent に
+                         すると確保された 80x80 タイル全域が hover 判定対象になる。 -->
                     <Grid x:Name="tile"
+                          Background="Transparent"
                           Width="{Binding DataContext.ThumbnailSize, RelativeSource={RelativeSource AncestorType=Window}}"
                           Height="{Binding DataContext.ThumbnailSize, RelativeSource={RelativeSource AncestorType=Window}}"
                           ToolTip="{Binding Url}">
